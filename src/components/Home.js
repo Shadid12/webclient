@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import {CSVLink, CSVDownload} from 'react-csv';
+import Confirm from 'react-confirm-bootstrap';
+import Person from './Person';
 
 export default class Home extends Component {
 
@@ -12,10 +14,16 @@ export default class Home extends Component {
 				['username', 'address', 'postal' ]
 			]
 		}
+		this._callApiByUsers();
+
 	}
 
-	componentDidMount() {
-		this._callApi();
+	_callApiByUsers() {
+		axios.get('http://shadid12.herokuapp.com/index')
+		.then((res) => {
+			this.setState({data: res});
+			console.log(res.data);
+		});
 	}
 
 	_callApi() {
@@ -32,15 +40,18 @@ export default class Home extends Component {
 		});
 	}
 
-	handleClick() {
-		console.log("yayay");
-	}
+	onConfirm() {
+       console.log('suck it');
+    }
 
 	render() {
 		return (
-			<button>
-				<CSVLink data={this.state.csvData}>Download Data</CSVLink>
-			</button>
+			<div>
+				<CSVLink data={this.state.csvData}>Download One CSV</CSVLink>
+				<ul>
+					
+				</ul>
+			</div>
 		)
 	}
 }
