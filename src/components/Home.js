@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import {CSVLink, CSVDownload} from 'react-csv';
-import Confirm from 'react-confirm-bootstrap';
 import Person from './Person';
 
 export default class Home extends Component {
@@ -21,8 +20,20 @@ export default class Home extends Component {
 	_callApiByUsers() {
 		axios.get('http://shadid12.herokuapp.com/index')
 		.then((res) => {
-			this.setState({data: res});
-			console.log(res.data);
+			for (var val of res.data) {
+				var obj = {
+					name: val._id,
+					arr: [['postal', 'address']]
+				}
+				for ( var i = 0; i < val.postal.length; i++ ) {
+					var s = [];
+					s.push(val.postal[i]);
+					s.push(val.address[i]);
+					obj.arr.push(s);
+				}
+				this.setState({data: [...this.state.data, obj] });
+			}
+			console.log(this.state.data);
 		});
 	}
 
@@ -47,9 +58,14 @@ export default class Home extends Component {
 	render() {
 		return (
 			<div>
-				<CSVLink data={this.state.csvData}>Download One CSV</CSVLink>
 				<ul>
-					
+					{
+						this.state.data.map((data) => {
+							return(
+								<li key={data.name}><Person name={data.name} csv={data.arr} /></li>
+							)
+						})
+					}
 				</ul>
 			</div>
 		)
