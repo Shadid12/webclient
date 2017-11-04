@@ -10,10 +10,10 @@ export default class Home extends Component {
 		this.state = {
 			data: [],
 			csvData: [
-				['username', 'address', 'postal' ]
+				['username', 'address', 'postal', 'city', 'pin' ]
 			]
 		}
-		this._callApiByUsers();
+		this._callApi();
 
 	}
 
@@ -46,6 +46,8 @@ export default class Home extends Component {
 				arr.push(value.username);
 				arr.push(value.address);
 				arr.push(value.postal);
+				arr.push(value.city);
+				arr.push(value.pin);
 				this.setState({ csvData: [...this.state.csvData, arr] });
 			}
 		});
@@ -58,15 +60,7 @@ export default class Home extends Component {
 	render() {
 		return (
 			<div>
-				<ul>
-					{
-						this.state.data.map((data) => {
-							return(
-								<li key={data.name}><Person name={data.name} csv={data.arr} /></li>
-							)
-						})
-					}
-				</ul>
+				<CSVLink data={this.state.csvData}>Download</CSVLink>
 			</div>
 		)
 	}
