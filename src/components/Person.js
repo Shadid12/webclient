@@ -4,27 +4,15 @@ import {CSVLink} from 'react-csv';
 export default class Person extends Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-			csv: [
-				['address', 'postal']
-			]
-		}
-		// this.prepare();
 	}
 
-	componentWillMount() {
-		this.prepare();
-	}
-
-	prepare() {
-		console.log(this.props.address)
-	}
 
 	render() {
 		return (
 			<div>
-				<span> {this.props.name} || </span>
-				<CSVLink data={this.props.csv}>Download</CSVLink>
+				<span>{this.props.value.name}</span> ||
+                <span> : {this.props.value.arr.length} || </span>
+                <CSVLink data={this.props.data}>Download</CSVLink>
 			</div>
 		)
 	}

@@ -10,30 +10,19 @@ export default class Home extends Component {
 		this.state = {
 			data: [],
 			csvData: [
-				['username', 'address', 'postal', 'city', 'pin' ]
-			]
-		}
+				['username', 'address', 'pin' ]
+			],
+            users: []
+		};
 		this._callApi();
+		this._callApiByUsers();
 
 	}
 
 	_callApiByUsers() {
 		axios.get('http://shadid12.herokuapp.com/index')
 		.then((res) => {
-			for (var val of res.data) {
-				var obj = {
-					name: val._id,
-					arr: [['postal', 'address']]
-				}
-				for ( var i = 0; i < val.postal.length; i++ ) {
-					var s = [];
-					s.push(val.postal[i]);
-					s.push(val.address[i]);
-					obj.arr.push(s);
-				}
-				this.setState({data: [...this.state.data, obj] });
-			}
-			console.log(this.state.data);
+			this.setState({users: res.data});
 		});
 	}
 
@@ -41,12 +30,10 @@ export default class Home extends Component {
 		axios.get('http://shadid12.herokuapp.com/plain')
 		.then((res) => {
 			// this.setState({data: res.data});
-			for (var value of res.data){
-				var arr = [];
+			for (let value of res.data){
+				let arr = [];
 				arr.push(value.username);
 				arr.push(value.address);
-				arr.push(value.postal);
-				arr.push(value.city);
 				arr.push(value.pin);
 				this.setState({ csvData: [...this.state.csvData, arr] });
 			}
@@ -61,6 +48,23 @@ export default class Home extends Component {
 		return (
 			<div>
 				<CSVLink data={this.state.csvData}>Download</CSVLink>
+                <br />
+                <ul>
+                    {
+                        this.state.users.map( (user) => {
+                            let data = [ ['address', 'pin' ] ];
+                            for (let value of user.arr){
+                                let arr = [];
+                                arr.push(value.address);
+                                arr.push(value.pin);
+                                data = [...data, arr];
+                            }
+                            return (
+                                <Person key={user.name} value={user} data={data}/>
+                            )
+                        })
+                    }
+                </ul>
 			</div>
 		)
 	}
