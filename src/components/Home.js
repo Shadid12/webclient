@@ -10,7 +10,7 @@ export default class Home extends Component {
 		this.state = {
 			data: [],
 			csvData: [
-				['username', 'address', 'pin' ]
+				['username', 'count' ,'address', 'pin' ]
 			],
             users: []
 		};
@@ -33,6 +33,7 @@ export default class Home extends Component {
 			for (let value of res.data){
 				let arr = [];
 				arr.push(value.username);
+				arr.push(value.count);
 				arr.push(value.address);
 				arr.push(value.pin);
 				this.setState({ csvData: [...this.state.csvData, arr] });
@@ -52,9 +53,10 @@ export default class Home extends Component {
                 <ul>
                     {
                         this.state.users.map( (user) => {
-                            let data = [ ['address', 'pin' ] ];
+                            let data = [ ['count', 'address', 'pin' ] ];
                             for (let value of user.arr){
                                 let arr = [];
+                                arr.push(value.count);
                                 arr.push(value.address);
                                 arr.push(value.pin);
                                 data = [...data, arr];
